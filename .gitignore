@@ -1,0 +1,21 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+env/
+
+# Database file
+study.db
+
+# Matplotlib cache
+.matplotlib/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
