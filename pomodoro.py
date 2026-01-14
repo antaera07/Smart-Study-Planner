@@ -1,33 +1,30 @@
-from tkinter import messagebox
+def start_timer(label, root, work=25, break_time=5):
+    total = work * 60
 
-def start_timer(root, work=25, break_time=5):
-    seconds = work * 60
+    def countdown(sec):
+        m = sec // 60
+        s = sec % 60
+        label.config(text=f"{m:02d}:{s:02d}")
 
-    def countdown(count):
-        mins = count // 60
-        secs = count % 60
-        root.title(f"Focus Time: {mins:02d}:{secs:02d}")
-
-        if count > 0:
-            root.after(1000, countdown, count - 1)
+        if sec > 0:
+            root.after(1000, countdown, sec - 1)
         else:
-            messagebox.showinfo("Break Time", "Focus session complete! Take a break.")
-            start_break()
+            label.config(text="Break Time!")
+            root.after(1000, start_break)
 
     def start_break():
-        seconds = break_time * 60
+        total_break = break_time * 60
 
-        def break_count(count):
-            mins = count // 60
-            secs = count % 60
-            root.title(f"Break Time: {mins:02d}:{secs:02d}")
+        def break_count(sec):
+            m = sec // 60
+            s = sec % 60
+            label.config(text=f"Break {m:02d}:{s:02d}")
 
-            if count > 0:
-                root.after(1000, break_count, count - 1)
+            if sec > 0:
+                root.after(1000, break_count, sec - 1)
             else:
-                messagebox.showinfo("Session Complete", "Break over! Ready for another round.")
-                root.title("Smart Study Planner")
+                label.config(text="Session Complete!")
 
-        break_count(seconds)
+        break_count(total_break)
 
-    countdown(seconds)
+    countdown(total)
