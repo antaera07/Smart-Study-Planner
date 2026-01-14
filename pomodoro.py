@@ -1,30 +1,25 @@
-def start_timer(label, root, work=25, break_time=5):
-    total = work * 60
+def start_pomodoro(root, label, work=25, break_time=5):
+    work_seconds = work * 60
+    break_seconds = break_time * 60
 
-    def countdown(sec):
-        m = sec // 60
-        s = sec % 60
-        label.config(text=f"{m:02d}:{s:02d}")
+    def run_work(count):
+        mins = count // 60
+        secs = count % 60
+        label.config(text=f"Focus {mins:02d}:{secs:02d}")
 
-        if sec > 0:
-            root.after(1000, countdown, sec - 1)
+        if count > 0:
+            root.after(1000, run_work, count - 1)
         else:
-            label.config(text="Break Time!")
-            root.after(1000, start_break)
+            root.after(1000, run_break, break_seconds)
 
-    def start_break():
-        total_break = break_time * 60
+    def run_break(count):
+        mins = count // 60
+        secs = count % 60
+        label.config(text=f"Break {mins:02d}:{secs:02d}")
 
-        def break_count(sec):
-            m = sec // 60
-            s = sec % 60
-            label.config(text=f"Break {m:02d}:{s:02d}")
+        if count > 0:
+            root.after(1000, run_break, count - 1)
+        else:
+            label.config(text="Session Complete!")
 
-            if sec > 0:
-                root.after(1000, break_count, sec - 1)
-            else:
-                label.config(text="Session Complete!")
-
-        break_count(total_break)
-
-    countdown(total)
+    run_work(work_seconds)
