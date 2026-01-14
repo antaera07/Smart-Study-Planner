@@ -1,13 +1,15 @@
 from tkinter import *
 from database import setup, connect
 from scheduler import generate_schedule
-from pomodoro import start_timer
+from pomodoro import start_pomodoro
 from tracker import show_progress
 
 setup()
 
 root = Tk()
 root.title("Smart Study Planner")
+timer_label = Label(root, text="25:00", font=("Arial", 18))
+timer_label.pack(pady=10)
 
 def add_subject():
     conn = connect()
@@ -34,7 +36,8 @@ hours = Entry(root)
 hours.pack()
 
 Button(root, text="Add Subject", command=add_subject).pack()
-Button(root, text="Start Pomodoro", command=start_timer).pack()
+Button(root, text="Start Pomodoro",
+       command=lambda: start_pomodoro(root, timer_label)).pack()
 Button(root, text="Show Progress", command=show_progress).pack()
 
 root.mainloop()
