@@ -1,19 +1,33 @@
-import threading
-import time
 from tkinter import messagebox
 
-def pomodoro_cycle(work, break_time):
-    for _ in range(work * 60):
-        time.sleep(1)
+def start_timer(root, work=25, break_time=5):
+    seconds = work * 60
 
-    messagebox.showinfo("Break Time!", "Work session complete! Take a break.")
+    def countdown(count):
+        mins = count // 60
+        secs = count % 60
+        root.title(f"Focus Time: {mins:02d}:{secs:02d}")
 
-    for _ in range(break_time * 60):
-        time.sleep(1)
+        if count > 0:
+            root.after(1000, countdown, count - 1)
+        else:
+            messagebox.showinfo("Break Time", "Focus session complete! Take a break.")
+            start_break()
 
-    messagebox.showinfo("Session Complete", "Break over! Ready for another round.")
+    def start_break():
+        seconds = break_time * 60
 
-def start_timer(work=25, break_time=5):
-    t = threading.Thread(target=pomodoro_cycle, args=(work, break_time))
-    t.daemon = True
-    t.start()
+        def break_count(count):
+            mins = count // 60
+            secs = count % 60
+            root.title(f"Break Time: {mins:02d}:{secs:02d}")
+
+            if count > 0:
+                root.after(1000, break_count, count - 1)
+            else:
+                messagebox.showinfo("Session Complete", "Break over! Ready for another round.")
+                root.title("Smart Study Planner")
+
+        break_count(seconds)
+
+    countdown(seconds)
